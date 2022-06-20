@@ -10,6 +10,9 @@
         <module>contract</module>
         <module>eureka-service</module>
         <module>market</module>
+        <module>file-store</module>
+        <module>user-service</module>
+        <module>order-service</module>
     </modules>
 
     <parent>

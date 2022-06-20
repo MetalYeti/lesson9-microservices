@@ -32,7 +32,7 @@
                 <th>№</th>
                 <th>Название товара</th>
                 <th>Цена за ед.</th>
-                <th>Кол-во</th>
+                <th colspan="2">Кол-во</th>
                 <th>Сумма</th>
             </tr>
             </thead>
@@ -41,7 +41,12 @@
                 <td th:text="${itrStat.index + 1}"/>
                 <td th:text="${cartItem.product.title}"/>
                 <td th:text="${cartItem.itemPrice}"/>
-                <td th:text="${cartItem.quantity}"/>
+                <form th:action="@{'/cart/add/' + ${cartItem.product.id}}" method="get">
+                <td><input type="number" min="1" th:name="qty" th:value="${cartItem.quantity}" size="4"/></td>
+                <td>
+                    <button type="submit" class="btn btn-primary">Изменить количество</button>
+                </td>
+                </form>
                 <td th:text="${cartItem.totalPrice}"/>
             </tr>
             <tr>

@@ -1,24 +1,23 @@
 <!DOCTYPE html>
 
 <html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<html lang="en">
 
 <head>
-    <meta charset="utf-8"/>
-
-    <title>Регистрация пользователя</title>
-
-    <link rel="icon" type="image/png" th:href="@{/favicon.ico}"/>
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-
-    <meta name="ctx" th:content="${#httpServletRequest.getContextPath()}"/>
+    <title>Register New User Form</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+		.error {color:red}
+    </style>
 </head>
 
 <body>
-
-<div th:replace="~{navigation :: navi(Register)}"/>
 
 <div>
 
@@ -88,6 +87,17 @@
                         <input th:field="*{email}" placeholder="email (*)" class="form-control"/>
                     </div>
 
+                    <div class="error" th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}" />
+                    <div class="form-group">
+                        <label>Roles</label>
+                        <select multiple class="form-control" id="roles" th:field="*{roles}" required>
+                            <option th:each="role: ${roles}"
+                                    th:value="${role.name}"
+                                    th:text="${role.name}"
+                                    th:selected="${systemUser.roles?.contains(role)}">
+                            </option>
+                        </select>
+                    </div>
                     <div style="margin-top: 10px" class="form-group">
                         <div class="col-sm-6 controls">
                             <button type="submit" class="btn btn-primary">Register</button>

@@ -23,7 +23,41 @@
 <div class="container">
     <h1>Администрационная панель</h1>
     <br>
-    <a th:href="@{/products/add}">Добавить товар</a>
+    <a th:href="@{/products/showProductForm}">Добавить товар</a>
+    <hr>
 </div>
+<div class="container">
+    <h1>Зарегистрированные пользователи</h1>
+    <br>
+    <table class="table table-hover">
+        <thead class="thead-dark">
+        <tr>
+            <th>ID</th>
+            <th>Логин</th>
+            <th>Имя</th>
+            <th>Фамилия</th>
+            <th>E-mail</th>
+            <th>Роли</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <tr th:each="user : ${users}">
+
+            <td th:text="${user.id}"/>
+            <td th:text="${user.userName}" />
+            <td th:text="${user.firstName}"/>
+            <td th:text="${user.lastName}"/>
+            <td th:text="${user.email}"/>
+            <td>
+                <ul th:each="role : ${user.roles}">
+                    <li th:text="${role}"/>
+                </ul>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
 </body>
 </html>

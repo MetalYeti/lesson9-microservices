@@ -1,6 +1,6 @@
 package contract.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -16,7 +16,7 @@ public class ProductImage {
 
     @ManyToOne
     @JoinColumn(name = "product_id")
-    @JsonBackReference                  // JSON INFINITY LOOP PREVENTION
+    @JsonIgnore
     private Product product;
 
     @Column(name = "path")

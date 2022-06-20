@@ -21,7 +21,7 @@
 
 <div class="container">
     <br>
-    <h1 th:text="${order.user.firstName + '!'}"></h1>
+    <h1 th:text="${order.getUser().getFirstName() + '!'}"></h1>
     <p style="margin-bottom: 40px">Ваш заказ успешно оформлен. В ближайшее время мы приступим к его сборке.</p>
     <table style="border-collapse: collapse;">
         <caption style="font-weight: bold; margin-bottom: 20px">Состав заказа</caption>

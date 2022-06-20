@@ -19,7 +19,7 @@
 
 <div class="fluid-container" th:fragment="navi(activeTab)">
     <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary ">
-        <a class="navbar-brand" th:href="@{/}">GeekWinterMarket</a>
+        <a class="navbar-brand" th:href="@{/}">GeekSummerMarket</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -27,7 +27,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item" th:classappend="${activeTab == 'Shop' ? 'active' : ''}">
-                    <a class="nav-link products-page" th:href="@{/shop/?page=1}">Товары<span
+                    <a class="nav-link" th:href="@{/shop/?page=1}">Товары<span
                             class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item" th:classappend="${activeTab == 'Cart' ? 'active' : ''}">
@@ -51,11 +51,11 @@
                     </form>
                 </li>
                 <li sec:authorize="isAnonymous()" class="nav-item">
-                    <form class="align-middle sign-in-form" th:action="@{/authenticateTheUser}" method="POST">
+                    <form class="align-middle" th:action="@{/authenticateTheUser}" method="POST">
                         <div class="input-group-prepend">
-                            <input class="form-control form-login" type="text" placeholder="Логин" name="username"
+                            <input class="form-control" type="text" placeholder="Логин" name="username"
                                    aria-describedby="inputGroup-sizing-sm">
-                            <input class="form-control form-password" type="text" placeholder="Пароль" name="password"
+                            <input class="form-control" type="password" placeholder="Пароль" name="password"
                                    aria-describedby="inputGroup-sizing-sm">
                             <button class="btn btn-secondary btn-sm" type="submit">Войти</button>
                         </div>

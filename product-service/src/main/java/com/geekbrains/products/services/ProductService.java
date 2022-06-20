@@ -48,7 +48,7 @@ public class ProductService {
     public void saveProduct(ProductDTO productDTO) {
         if (!isProductWithTitleExists(productDTO.getTitle())) {
             Product product = new Product();
-            product.setCategory(categoryService.getCategory(productDTO.getCategoryId()));
+            product.setCategory(productDTO.getCategory());
             product.setVendorCode(productDTO.getVendorCode());
             product.setTitle(productDTO.getTitle());
             product.setShortDescription(productDTO.getShortDescription());
