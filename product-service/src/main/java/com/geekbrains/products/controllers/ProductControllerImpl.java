@@ -60,6 +60,7 @@ public class ProductControllerImpl implements ProductController {
 	
 	@Override
 	public void addImage(String title, String imageName) {
-	
+		Long id = getProductByTitle(title).getId();
+		productService.addImage(id, imageName);
 	}
 }
