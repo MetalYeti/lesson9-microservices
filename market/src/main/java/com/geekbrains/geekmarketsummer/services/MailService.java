@@ -1,54 +1,68 @@
 package com.geekbrains.geekmarketsummer.services;
 
 import contract.entities.Order;
+import contract.entities.OrderItem;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+
 
 @Service
 public class MailService {
-    private JavaMailSender sender;
-    private MailMessageBuilder messageBuilder;
-    private final ExecutorService executorService = Executors.newSingleThreadExecutor();
+
+    private JavaMailSender javaMailSender;
 
     @Autowired
-    public void setSender(JavaMailSender sender) {
-        this.sender = sender;
+    public void setJavaMailSender(JavaMailSender javaMailSender) {
+        this.javaMailSender = javaMailSender;
     }
 
-    @Autowired
-    public void setMessageBuilder(MailMessageBuilder messageBuilder) {
-        this.messageBuilder = messageBuilder;
-    }
+    public void sendOrderNotification(Order order) throws MessagingException {
+        String userEmail = order.getUser().getEmail();
+        StringBuilder sb = new StringBuilder();
+        sb.append("Уважаемый ")
+                .append(order.getUser().getFirstName())
+                .append(" ")
+                .append(order.getUser().getLastName())
+                .append(", благодарим Вас за заказ сделанный в нашем магазине!\n\n")
+                .append("Статус Вашего заказа: ")
+                .append(order.getStatus().getTitle())
+                .append("\n\n")
+                .append("Содержимое заказа:\n");
 
-    public void sendMail(String email, String subject, String text) {
-        MimeMessage message = sender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, "UTF-8");
-
-        try {
-            helper.setTo(email);
-            helper.setText(text, true);
-            helper.setSubject(subject);
-        } catch (MessagingException e) {
-            e.printStackTrace();
+        for (OrderItem item : order.getOrderItems()) {
+            sb.append(item.getProduct().getTitle())
+                    .append(" - ")
+                    .append(item.getQuantity())
+                    .append(" x ")
+                    .append(item.getItemPrice())
+                    .append(" = ")
+                    .append(item.getTotalPrice())
+                    .append("\n");
         }
+        sb.append("\nСумма заказа: ")
+                .append(order.getPrice());
 
-        try {
-            executorService.submit(() -> sender.send(message));
-        } catch (MailException e) {
-            e.printStackTrace();
-        }
+        sb.append("\nАдрес доставки: ")
+                .append(order.getDeliveryAddress().getAddress())
+                .append("\n");
+
+        sendMessage(userEmail, sb.toString());
     }
 
-    public void sendOrderMail(Order order) {
-        sendMail(order.getUser().getEmail(), String.format("Заказ %d%n отправлен в обработку", order.getId()), messageBuilder.buildOrderEmail(order));
+    public void sendMessage(String to, String text) throws MessagingException {
+        MimeMessage message = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+
+        helper.setFrom("andruxa.ic@gmail.com");
+        helper.setTo(to);
+        helper.setSubject("Информация о заказе в GeekSummerMarket");
+        helper.setText(text);
+
+        javaMailSender.send(message);
     }
 }
