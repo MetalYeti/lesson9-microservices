@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
@@ -32,7 +33,7 @@ public class ShopController {
     private MailService mailService;
     private UserService userService;
     private OrderService orderService;
-    private ProductService productService;
+
     private ShoppingCartService shoppingCartService;
     private DeliveryAddressService deliverAddressService;
     private SimpMessagingTemplate template;
@@ -41,13 +42,13 @@ public class ShopController {
     private Logger logger = LoggerFactory.getLogger(ShopController.class);
 
     @Autowired
-    public void setProductClient(ProductService productClient) {
-        this.productClient = productClient;
+    public void setMailService(MailService mailService) {
+        this.mailService = mailService;
     }
 
     @Autowired
-    public void setProductService(ProductService productService) {
-        this.productService = productService;
+    public void setProductClient(ProductService productClient) {
+        this.productClient = productClient;
     }
 
     @Autowired
@@ -68,11 +69,6 @@ public class ShopController {
     @Autowired
     public void setDeliverAddressService(DeliveryAddressService deliverAddressService) {
         this.deliverAddressService = deliverAddressService;
-    }
-
-    @Autowired
-    public void setMailService(MailService mailService) {
-        this.mailService = mailService;
     }
 
     @Autowired
@@ -157,7 +153,7 @@ public class ShopController {
     }
 
     @GetMapping("/order/result/{id}")
-    public String orderConfirm(Model model, @PathVariable(name = "id") Long id, Principal principal) {
+    public String orderConfirm(HttpSession httpSession, Model model, @PathVariable(name = "id") Long id, Principal principal) throws MessagingException {
         if (principal == null) {
             return "redirect:/login";
         }
@@ -167,7 +163,8 @@ public class ShopController {
         if (!user.getId().equals(confirmedOrder.getUser().getId())) {
             return "redirect:/";
         }
-        mailService.sendOrderMail(confirmedOrder);
+        mailService.sendOrderNotification(confirmedOrder);
+        shoppingCartService.resetCart(httpSession);
         model.addAttribute("order", confirmedOrder);
         return "order-result";
     }

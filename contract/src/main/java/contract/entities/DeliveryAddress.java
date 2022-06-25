@@ -3,11 +3,12 @@ package contract.entities;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "delivery_addresses")
 @Data
-public class DeliveryAddress {
+public class DeliveryAddress implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
